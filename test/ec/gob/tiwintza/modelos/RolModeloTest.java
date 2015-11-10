@@ -44,11 +44,27 @@ public class RolModeloTest {
      */
     @Test
     public void testInsertarRol() throws Exception {
-        System.out.println("insertarRol");
+        System.out.println("insertar Rol");
         RolEntidad objRolIngresar = new RolEntidad("Test");
         boolean booResultadoEsperado = true;
         boolean booResultado = RolModelo.insertarRol(objRolIngresar);
         assertEquals(booResultado, booResultadoEsperado);
     }
     
+    @Test
+    public void testEliminarRol() throws Exception{
+        System.out.println("Eliminar Rol");
+        int intResultadoNoEsperado=1;
+        int intResultado= RolModelo.eliminarRol(12);
+        assertNotSame(intResultado, intResultadoNoEsperado);
+    }
+    
+    @Test
+    public void testActualizarRol() throws Exception{
+        System.out.println("Actualizar Rol");
+        RolEntidad objR=new RolEntidad(13, "Administrador test");
+        int intResultadoNoEsperado=1;
+        int intResultado= RolModelo.actualizarRol(objR);
+        assertNotSame(intResultado, intResultadoNoEsperado);
+    }
 }

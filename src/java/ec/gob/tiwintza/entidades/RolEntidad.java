@@ -49,5 +49,10 @@ public class RolEntidad {
 
     public RolEntidad() {
     }
+
+    public RolEntidad(long rol_id, String rol_descripcion) {
+        this.rol_id = rol_id;
+        this.rol_descripcion = rol_descripcion;
+    }
     //</editor-fold>
 }

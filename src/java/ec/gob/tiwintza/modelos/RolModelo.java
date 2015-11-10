@@ -9,6 +9,7 @@ import ec.gob.tiwintza.accesodatos.AccesoDatos;
 import ec.gob.tiwintza.accesodatos.ConjuntoResultado;
 import ec.gob.tiwintza.accesodatos.Parametro;
 import ec.gob.tiwintza.entidades.RolEntidad;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -17,24 +18,19 @@ import java.util.ArrayList;
  * @author eborja
  */
 public class RolModelo {
-    
-//    public static Boolean actualizarRol(RolEntidad objRolActualizar) throws Exception {
-//        Boolean booResultado = false;
-//        String strQuery = "SELECT bd_st.fn_update_subcriterio_hijo(?,?,?,?)";
-//        ArrayList<Parametro> arrLisParametros = new ArrayList<>();
-//        arrLisParametros.add(new Parametro(1, objSubcriterio.getLonId()));
-//        arrLisParametros.add(new Parametro(2, objSubcriterio.getObjCriterio().getLonId()));
-//        arrLisParametros.add(new Parametro(3, objSubcriterio.getObjSubcriterioPadre().getObjSubcriterioHijo().getLonId()));
-//        arrLisParametros.add(
-//                new Parametro(4, objSubcriterio.getObjSubcriterioPadre().getObjSubcriterioHijo().getObjCriterio().getLonId()));
-//        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, arrLisParametros);
-//        while (conResultado.next()) {
-//            if (conResultado.getString(0).equals("true")) {
-//                booResultado = true;
-//            }
-//        }
-//        return booResultado;
-//    }
+
+    public static int actualizarRol(RolEntidad objRolActualizar) throws Exception {
+        int intResultado = 0;
+        String strQuery = "select bd_st.fn_update_rol(?,?)";
+        ArrayList<Parametro> arrLisParametros = new ArrayList<>();
+        arrLisParametros.add(new Parametro(1, objRolActualizar.getRol_id()));
+        arrLisParametros.add(new Parametro(2, objRolActualizar.getRol_descripcion()));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, arrLisParametros);
+        while (conResultado.next()) {
+            intResultado = conResultado.getInt(0);
+        }
+        return intResultado;
+    }
 
     public static boolean insertarRol(RolEntidad objRolIngresar) throws Exception {
         boolean booRespuesta = false;
@@ -55,51 +51,47 @@ public class RolModelo {
         return booRespuesta;
     }
 
-//    public static ArrayList<CSubcriterioHijo> obtenerSubcriterio() throws Exception {
-//        ArrayList<CSubcriterioHijo> arrLstSubcriterio = new ArrayList<>();
-//        try {
-//            String strSql = "SELECT * FROM sga.fn_select_subcriterio();";
-//            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql);
-//            arrLstSubcriterio = llenarSubcriterio(conResultado);
-//            conResultado = null;
-//        } catch (SQLException exConec) {
-//            throw new Exception(exConec.getMessage());
-//        }
-//        return arrLstSubcriterio;
-//    }
-//
-//    public static ArrayList<CSubcriterioHijo> llenarSubcriterio(ConjuntoResultado conResultado) throws Exception {
-//        ArrayList<CSubcriterioHijo> arrLstSubcriterio = new ArrayList<>();
-//        CSubcriterioHijo objSubcriterio = null;
-//        try {
-//            while (conResultado.next()) {
-//                if (conResultado.getBoolean(7) == true) {
-//                    objSubcriterio = new CSubcriterioHijo(conResultado.getLong(0), conResultado.getString(3),
-//                            new CSubcriterioPadre(new CSubcriterioHijo(conResultado.getLong(4),conResultado.getString(8), new CCriterio(conResultado.getLong(5)))),
-//                            new CCriterio(conResultado.getLong(1), conResultado.getString(2)), conResultado.getBoolean(6), conResultado.getBoolean(7));
-//                    arrLstSubcriterio.add(objSubcriterio);
-//                }
-//            }
-//        } catch (Exception e) {
-//            arrLstSubcriterio.clear();
-//            //  integracion.auditoria.log ublog = new integracion.auditoria.log();
-//            // ublog.write("Modulo", "llenarModulos", e.getClass().getName(), e.getMessage());
-//            throw e;
-//        }
-//        return arrLstSubcriterio;
-//    }
-//
-//    public static int eliminarSubcriterioPadreHijos(long lonSubcriterioId, long lonCriterioId) throws Exception {
-//        String strQuery = "SELECT sga.fg_update_subcriterio_padre_hijos_eliminacion(?,?)";
-//        int intResultado = 0;
-//        ArrayList<Parametro> lisParametros = new ArrayList<Parametro>();
-//        lisParametros.add(new Parametro(1, lonSubcriterioId));
-//        lisParametros.add(new Parametro(2, lonCriterioId));
-//        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, lisParametros);
-//        while (conResultado.next()) {
-//            intResultado = (int) conResultado.getLong(0);
-//        }
-//        return intResultado;
-//    }
-    
+    public static ArrayList<RolEntidad> obtenerRol() throws Exception {
+        ArrayList<RolEntidad> arrLstSubcriterio = new ArrayList<>();
+        try {
+            String strSql = "call bd_st.pr_select_rol();";
+            ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql);
+            arrLstSubcriterio = llenarRol(conResultado);
+            conResultado = null;
+        } catch (SQLException exConec) {
+            throw new Exception(exConec.getMessage());
+        }
+        return arrLstSubcriterio;
+    }
+
+    public static ArrayList<RolEntidad> llenarRol(ConjuntoResultado conResultado) throws Exception {
+        ArrayList<RolEntidad> arrLstSubcriterio = new ArrayList<>();
+        RolEntidad objRol = null;
+        try {
+            while (conResultado.next()) {
+                
+                    objRol = new RolEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1));
+                    arrLstSubcriterio.add(objRol);
+            }
+        } catch (Exception e) {
+            arrLstSubcriterio.clear();
+            //  integracion.auditoria.log ublog = new integracion.auditoria.log();
+            // ublog.write("Modulo", "llenarModulos", e.getClass().getName(), e.getMessage());
+            throw e;
+        }
+        return arrLstSubcriterio;
+    }
+
+    public static int eliminarRol(long lonIdRolEliminar) throws Exception {
+        String strQuery = "select bd_st.fn_delete_rol(?)";
+        int intResultado = 0;
+        ArrayList<Parametro> lisParametros = new ArrayList<>();
+        lisParametros.add(new Parametro(1, lonIdRolEliminar));
+        ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, lisParametros);
+        while (conResultado.next()) {
+            intResultado = conResultado.getInt(0);
+        }
+        return intResultado;
+    }
+
 }

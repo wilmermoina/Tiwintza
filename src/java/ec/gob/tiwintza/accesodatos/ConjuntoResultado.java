@@ -8,6 +8,7 @@ package ec.gob.tiwintza.accesodatos;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -80,6 +81,14 @@ public class ConjuntoResultado {
             throw e;
         }
 
+    }
+    
+    public BigInteger getBigInteger(int nCol) throws Exception{
+        try {
+            return new BigInteger(this.Datos.get(indFil)[nCol].toString());
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public String getString(String nomCol) throws Exception {
