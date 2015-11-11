@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+            <h:outputText value="Registro de Tipo de tramites" style="margin-left: 5%;"/>
+            <p:separator />
+        </ui:define>
+
+        <ui:define name="contenido">
+            <h:form id="frmIngresarTipo">
+                <h:outputText value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                <p:inputText placeholder="Nombre" id="inpNombre" value="#{tipoControlador.objTipo.tipo_nombre}" style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                 <h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                 <p:inputText placeholder="Descripción" id="inpDescripcion" value="#{tipoControlador.objTipo.tipo_descripcion}" style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                <p:commandButton id="btnIngresarTipo" style="width: 30%;height: 32px;margin-left: 5%" value="Registrar" 
+                                 action="#{tipoControlador.insertarTipo()}" update=":frmIngresarTipo"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+
