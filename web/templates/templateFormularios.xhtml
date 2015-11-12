@@ -7,24 +7,35 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/theme.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
         <title>SysTrack</title>
     </h:head>
 
-    <h:body>
-
-        <p:layout fullPage="true">
-            <p:layoutUnit position="north" style="border: none" size="50">
-                <ui:insert name="top"/>
-            </p:layoutUnit>
-            <p:layoutUnit position="center" style="border: none">
-                <ui:insert name="contenido"/>
-                <p:growl id="grlMensajes" autoUpdate="true" life="3000"/>
-            </p:layoutUnit>
-        </p:layout>
+    <h:body style="background-color: #27506c;width: 100%;height: 100%;border: none;page: auto; margin-left: 0px; margin-right: 0px;">
+        
+            <p:layout    style="width: 90%;height:720px ;margin-left: auto;margin-right: auto; position:static "  >
+                <p:layoutUnit position="north"  size="80">
+                    <ui:insert name="top"/>
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    <ui:insert name="contenido"/>
+                    <p:growl id="grlMensajes" autoUpdate="true" life="3000"/>
+                </p:layoutUnit>
+                <p:layoutUnit position="west" size="300" >
+                    <h:form id="frmMenu">
+                        <p:panelMenu>
+                            <p:submenu label="Usuarios">
+                                <p:menuitem value="Crear"/>
+                                <p:menuitem value="Administrar"/>
+                            </p:submenu>
+                        </p:panelMenu>
+                    </h:form>
+                </p:layoutUnit>
+            </p:layout>
         <ui:insert name="dialogos"/>
-
     </h:body>
 
 </html>

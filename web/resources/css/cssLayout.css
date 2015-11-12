@@ -58,4 +58,10 @@
   text-decoration : underline;
 }
 
+.myLayoutStyleClass .ui-layout-unit-header{
+    background: yellow;
+}
 
+.myLayoutStyleClass .ui-layout-unit-content{
+   background: Blue;
+}

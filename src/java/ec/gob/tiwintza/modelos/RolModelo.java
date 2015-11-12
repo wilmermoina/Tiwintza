@@ -66,10 +66,9 @@ public class RolModelo {
 
     public static ArrayList<RolEntidad> llenarRol(ConjuntoResultado conResultado) throws Exception {
         ArrayList<RolEntidad> arrLstSubcriterio = new ArrayList<>();
-        RolEntidad objRol = null;
+        RolEntidad objRol;
         try {
             while (conResultado.next()) {
-                
                     objRol = new RolEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1));
                     arrLstSubcriterio.add(objRol);
             }

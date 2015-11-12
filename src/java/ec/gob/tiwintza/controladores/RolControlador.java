@@ -94,7 +94,6 @@ public class RolControlador {
 
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Funciones">
-
     public void cargarRol() {
         try {
             this.arrLisRol = RolModelo.obtenerRol();
@@ -115,11 +114,27 @@ public class RolControlador {
         }
         delete();
     }
-    
-    void delete(){
-        objRol=null;
-        objSelRol=null;
-        arrLisRol=null;
+
+    public void eliminarRol() {
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+            long lonIdRolEliminar = Long.parseLong(params.get("prmIdRolEliminar"));
+            if (RolModelo.eliminarRol(lonIdRolEliminar) > 1) {
+                Util.addSuccessMessage("Se elimino correctamente el Usuario");
+            } else {
+                Util.mostrarMensaje("No se pudo eliminar el Usuario");
+            }
+            cargarRol();
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+    }
+
+    void delete() {
+        objRol = null;
+        objSelRol = null;
+        arrLisRol = null;
     }
     //</editor-fold>
 }
