@@ -10,6 +10,20 @@
         </ui:define>
 
         <ui:define name="contenido">
+            <p:fieldset legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
+                    <h:outputText value="Registro de Usuarios" style="margin-left: 5%;"/>
+                    <p:separator />
+                    <h:form id="frmIngresoRol">
+                        <br/><h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText requiredMessage="Ingrese la DESCRIPCIÓN" required="true" 
+                                          placeholder="Descripción" id="inpDescripcion" 
+                                          value="#{rolControlador.objRol.rol_descripcion}" 
+                                          style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                        <p:commandButton id="btnIngresoRol" style="width: 32%;margin-left: 5%" value="Registrar" 
+                                         action="#{rolControlador.insertarRol()}" update=":frmIngresoRol :frmRol"
+                                         oncomplete="handleSubmitMenu(args,'frmIngresoRol');"/>
+                    </h:form>
+            </p:fieldset><br/>
             <p:panel>
                 <h:outputText value="Administración de Usuarios" style="margin-left: 5%;" />
                 <p:separator />
@@ -58,10 +72,10 @@
                         <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
                         <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
                                      value="#{rolControlador.objSelRol.rol_descripcion}"/><br/><br/><br/>
-                        <p:commandButton style="width: 40%;margin-left: 5%" value="Eliminar"
+                        <p:commandButton style="width: 43%;margin-left: 5%" value="Eliminar"
                                          action="#{rolControlador.eliminarRol()}"
                                          update=":frmRol :frmEliminarRol pnlRolEliminar" onclick="PF('wgEliminarRol').hide()">
-                            <f:param id="prmIdRolEliminar" value="#{rolControlador.objSelRol.rol_id}"/>
+                            <f:param name="prmIdRolEliminar" id="prmIdRol" value="#{rolControlador.objSelRol.rol_id}"/>
                         </p:commandButton> 
                     </p:panel>
                 </h:form> 

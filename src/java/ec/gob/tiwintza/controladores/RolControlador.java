@@ -113,6 +113,7 @@ public class RolControlador {
             Util.addErrorMessage(e.getMessage());
         }
         delete();
+        cargarRol();
     }
 
     public void eliminarRol() {
