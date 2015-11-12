@@ -11,18 +11,18 @@
 
         <ui:define name="contenido">
             <p:fieldset legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
-                    <h:outputText value="Registro de Usuarios" style="margin-left: 5%;"/>
-                    <p:separator />
-                    <h:form id="frmIngresoRol">
-                        <br/><h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
-                        <p:inputText requiredMessage="Ingrese la DESCRIPCIÓN" required="true" 
-                                          placeholder="Descripción" id="inpDescripcion" 
-                                          value="#{rolControlador.objRol.rol_descripcion}" 
-                                          style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
-                        <p:commandButton id="btnIngresoRol" style="width: 32%;margin-left: 5%" value="Registrar" 
-                                         action="#{rolControlador.insertarRol()}" update=":frmIngresoRol :frmRol"
-                                         oncomplete="handleSubmitMenu(args,'frmIngresoRol');"/>
-                    </h:form>
+                <h:outputText value="Registro de Usuarios" style="margin-left: 5%;"/>
+                <p:separator />
+                <h:form id="frmIngresoRol">
+                    <br/><h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                    <p:inputText requiredMessage="Ingrese la DESCRIPCIÓN" required="true" 
+                                 placeholder="Descripción" id="inpDescripcion" 
+                                 value="#{rolControlador.objRol.rol_descripcion}" 
+                                 style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                    <p:commandButton id="btnIngresoRol" style="width: 32%;margin-left: 5%" value="Registrar" 
+                                     action="#{rolControlador.insertarRol()}" update=":frmIngresoRol :frmRol"
+                                     oncomplete="handleSubmitMenu(args,'frmIngresoRol');"/>
+                </h:form>
             </p:fieldset><br/>
             <p:panel>
                 <h:outputText value="Administración de Usuarios" style="margin-left: 5%;" />
@@ -31,7 +31,7 @@
                     <p:dataTable id="datRol" value="#{rolControlador.arrLisRol}" var="rol" paginator="true" rows="10"
                                  selectionMode="single" selection="#{rolControlador.objSelRol}" rowKey="#{rol.rol_id}" 
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                                 rowsPerPageTemplate="5,10,15" rendered="#{rolControlador.arrLisRol.size() > 0 eq true}">
+                                 rowsPerPageTemplate="5,10,15" rendered="#{rolControlador.arrLisRol.size() > 0 eq true}" emptyMessage="Sin Registros">
                         <p:column headerText="Codigo">
                             <h:outputText value="#{rol.rol_id}"/>
                         </p:column>
@@ -41,8 +41,10 @@
                         <p:column style="width:80px;text-align: center" >
                             <p:panelGrid columns="2">
                                 <p:column>
-                                    <p:commandLink styleClass="ui-icon ui-icon-pencil" process="@this">       
-
+                                    <p:commandLink styleClass="ui-icon ui-icon-pencil" process="@this"
+                                                   oncomplete="PF('wgActualizarRol').show()"
+                                                   update=":dlgActualizarRol @parent">       
+                                        <f:setPropertyActionListener value="#{rol}" target="#{rolControlador.objSelRol}"/>
                                     </p:commandLink>
                                 </p:column>
                                 <p:column >
@@ -76,6 +78,27 @@
                                          action="#{rolControlador.eliminarRol()}"
                                          update=":frmRol :frmEliminarRol pnlRolEliminar" onclick="PF('wgEliminarRol').hide()">
                             <f:param name="prmIdRolEliminar" id="prmIdRol" value="#{rolControlador.objSelRol.rol_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+
+            <p:dialog id="dlgActualizarRol" widgetVar="wgActualizarRol" header="Actualizar Usuarios" 
+                      modal="true" closable="false" resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarRol">
+                    <p:panel id="pnlRolActualizar" style="width: 660px; height: 390px;">
+                        <br/><br/><p:outputLabel value="Id:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{rolControlador.objSelRol.rol_id}"/><br/><br/>
+                        <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{rolControlador.objSelRol.rol_descripcion}"/><br/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%" value="Actualizar"
+                                         action="#{rolControlador.actualizarRol()}"
+                                         update=":frmRol :frmActualizarRol pnlRolActualizar" onclick="PF('wgActualizarRol').hide()">
+                            <f:param name="prmIdRolActualizar" id="prmIdRol" value="#{rolControlador.objSelRol.rol_id}"/>
                         </p:commandButton> 
                     </p:panel>
                 </h:form> 

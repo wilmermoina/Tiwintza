@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <p:fieldset legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
+                <h:outputText value="Registro de Departamentos" style="margin-left: 5%;"/>
+                <p:separator />
+                <h:form id="frmIngresoDepartamento">
+                    <br/><h:outputText value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                    <p:inputText requiredMessage="Ingrese el NOMBRE" required="true" 
+                                 placeholder="Nombre" id="inpNombre" 
+                                 value="#{departamentoControlador.objDepartamento.departamento_nombre}" 
+                                 style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                    <br/><h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                    <p:inputTextarea counter="displayIngreso" counterTemplate="{0}" maxlength="100" requiredMessage="Ingrese la DESCRIPCIÓN" required="true" 
+                                 placeholder="Descripción" id="inpDescripcion" 
+                                 value="#{departamentoControlador.objDepartamento.departamento_descripcion}" 
+                                 style="width: 30%;height: 25px; margin-left: 5%"/>
+                    <h:outputText id="displayIngreso" style="margin-left: 5px"/><br/><br/>
+                    <p:commandButton id="btnIngresoDepartamento" style="width: 32%;margin-left: 5%" value="Registrar" 
+                                     action="#{departamentoControlador.insertarDepartamento()}" update=":frmIngresoDepartamento :frmDepartamento"
+                                     oncomplete="handleSubmitMenu(args,'frmIngresoDepartamento');"/>
+                </h:form>
+            </p:fieldset><br/>
+            <p:panel>
+                <h:outputText value="Administración de Departamentos" style="margin-left: 5%;" />
+                <p:separator />
+                <h:form id="frmDepartamento">
+                    <p:dataTable id="datDepartamento" value="#{departamentoControlador.arrLisDepartamento}" var="departamento" paginator="true" rows="10"
+                                 selectionMode="single" selection="#{departamentoControlador.objSelDepartamento}" rowKey="#{departamento.departamento_id}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15" rendered="#{departamentoControlador.arrLisDepartamento.size() > 0 eq true}" emptyMessage="Sin Registros">
+                        <p:column headerText="Codigo">
+                            <h:outputText value="#{departamento.departamento_id}"/>
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{departamento.departamento_nombre}"/>
+                        </p:column>
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{departamento.departamento_descripcion}"/>
+                        </p:column>
+                        <p:column style="width:80px;text-align: center" >
+                            <p:panelGrid columns="2">
+                                <p:column>
+                                    <p:commandLink styleClass="ui-icon ui-icon-pencil" process="@this"
+                                                   oncomplete="PF('wgActualizarDepartamento').show()"
+                                                   update=":dlgActualizarDepartamento @parent">       
+                                        <f:setPropertyActionListener value="#{departamento}" target="#{departamentoControlador.objSelDepartamento}"/>
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column >
+                                    <p:commandLink  styleClass="ui-icon ui-icon-trash" process="@this"
+                                                    oncomplete="PF('wgEliminarDepartamento').show()"
+                                                    update=":dlgEliminarDepartamento @parent">  
+                                        <f:setPropertyActionListener value="#{departamento}" target="#{departamentoControlador.objSelDepartamento}"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:panelGrid>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog id="dlgEliminarDepartamento" widgetVar="wgEliminarDepartamento" header="Eliminar Departamentos" 
+                      modal="true" closable="false" resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmEliminarDepartamento">
+                    <p:panel id="pnlDepartamentoEliminar" style="width: 660px; height: 390px;">
+                        <br/><p:outputLabel value="Id:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{departamentoControlador.objSelDepartamento.departamento_id}"/><br/><br/>
+                        <p:outputLabel value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{departamentoControlador.objSelDepartamento.departamento_nombre}"/><br/><br/>
+                        <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputTextarea disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{departamentoControlador.objSelDepartamento.departamento_descripcion}"/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%" value="Eliminar"
+                                         action="#{departamentoControlador.eliminarDepartamento()}"
+                                         update=":frmDepartamento :frmEliminarDepartamento pnlDepartamentoEliminar" onclick="PF('wgEliminarDepartamento').hide()">
+                            <f:param name="prmIdDepartamentoEliminar" id="prmIdDepartamento" value="#{departamentoControlador.objSelDepartamento.departamento_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+
+            <p:dialog id="dlgActualizarDepartamento" widgetVar="wgActualizarDepartamento" header="Actualizar Departamentos" 
+                      modal="true" closable="false" resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarDepartamento">
+                    <p:panel id="pnlDepartamentoActualizar" style="width: 660px; height: 390px;">
+                        <p:outputLabel value="Id:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{departamentoControlador.objSelDepartamento.departamento_id}"/><br/><br/>
+                        <p:outputLabel value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{departamentoControlador.objSelDepartamento.departamento_nombre}"/><br/><br/>
+                        <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputTextarea counterTemplate="{0}" maxlength="100" counter="display" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{departamentoControlador.objSelDepartamento.departamento_descripcion}"/>
+                        <h:outputText id="display" style="margin-left: 5px"/><br/><br/>
+                        <p:commandButton style="width: 43%;margin-left: 5%" value="Actualizar"
+                                         action="#{departamentoControlador.actualizarDepartamento()}"
+                                         update=":frmDepartamento :frmActualizarDepartamento pnlDepartamentoActualizar" onclick="PF('wgActualizarDepartamento').hide()">
+                            <f:param name="prmIdDepartamentoActualizar" id="prmIdDepartamento" value="#{departamentoControlador.objSelDepartamento.departamento_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+        </ui:define>
+
+    </ui:composition>
+</html>
+

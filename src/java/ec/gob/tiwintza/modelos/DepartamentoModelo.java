@@ -8,7 +8,7 @@ package ec.gob.tiwintza.modelos;
 import ec.gob.tiwintza.accesodatos.AccesoDatos;
 import ec.gob.tiwintza.accesodatos.ConjuntoResultado;
 import ec.gob.tiwintza.accesodatos.Parametro;
-import ec.gob.tiwintza.entidades.RolEntidad;
+import ec.gob.tiwintza.entidades.DepartamentoEntidad;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -16,14 +16,15 @@ import java.util.ArrayList;
  *
  * @author eborja
  */
-public class RolModelo {
+public class DepartamentoModelo {
 
-    public static int actualizarRol(RolEntidad objRolActualizar) throws Exception {
+    public static int actualizarDepartamento(DepartamentoEntidad objDepartamentoActualizar) throws Exception {
         int intResultado = 0;
-        String strQuery = "select bd_st.fn_update_rol(?,?)";
+        String strQuery = "select bd_st.fn_update_departamento(?,?,?)";
         ArrayList<Parametro> arrLisParametros = new ArrayList<>();
-        arrLisParametros.add(new Parametro(1, objRolActualizar.getRol_id()));
-        arrLisParametros.add(new Parametro(2, objRolActualizar.getRol_descripcion()));
+        arrLisParametros.add(new Parametro(1, objDepartamentoActualizar.getDepartamento_id()));
+        arrLisParametros.add(new Parametro(2, objDepartamentoActualizar.getDepartamento_descripcion()));
+        arrLisParametros.add(new Parametro(3, objDepartamentoActualizar.getDepartamento_nombre()));
         ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, arrLisParametros);
         while (conResultado.next()) {
             intResultado = conResultado.getInt(0);
@@ -31,12 +32,13 @@ public class RolModelo {
         return intResultado;
     }
 
-    public static boolean insertarRol(RolEntidad objRolIngresar) throws Exception {
+    public static boolean insertarDepartamento(DepartamentoEntidad objDepartamentoIngresar) throws Exception {
         boolean booRespuesta = false;
         try {
             ArrayList<Parametro> arrLisParametros = new ArrayList<>();
-            String strSql = "select bd_st.fn_insert_rol(?)";
-            arrLisParametros.add(new Parametro(1, objRolIngresar.getRol_descripcion()));
+            String strSql = "select bd_st.fn_insert_departamento(?,?)";
+            arrLisParametros.add(new Parametro(1, objDepartamentoIngresar.getDepartamento_descripcion()));
+            arrLisParametros.add(new Parametro(2, objDepartamentoIngresar.getDepartamento_nombre()));
             ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql, arrLisParametros);
             while (conResultado.next()) {
                 if (conResultado.getBoolean(0) == true) {
@@ -50,12 +52,12 @@ public class RolModelo {
         return booRespuesta;
     }
 
-    public static ArrayList<RolEntidad> obtenerRol() throws Exception {
-        ArrayList<RolEntidad> arrLstSubcriterio = new ArrayList<>();
+    public static ArrayList<DepartamentoEntidad> obtenerDepartamento() throws Exception {
+        ArrayList<DepartamentoEntidad> arrLstSubcriterio = new ArrayList<>();
         try {
-            String strSql = "call bd_st.pr_select_rol();";
+            String strSql = "call bd_st.pr_select_departamento();";
             ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strSql);
-            arrLstSubcriterio = llenarRol(conResultado);
+            arrLstSubcriterio = llenarDepartamento(conResultado);
             conResultado = null;
         } catch (SQLException exConec) {
             throw new Exception(exConec.getMessage());
@@ -63,13 +65,13 @@ public class RolModelo {
         return arrLstSubcriterio;
     }
 
-    public static ArrayList<RolEntidad> llenarRol(ConjuntoResultado conResultado) throws Exception {
-        ArrayList<RolEntidad> arrLstSubcriterio = new ArrayList<>();
-        RolEntidad objRol;
+    public static ArrayList<DepartamentoEntidad> llenarDepartamento(ConjuntoResultado conResultado) throws Exception {
+        ArrayList<DepartamentoEntidad> arrLstSubcriterio = new ArrayList<>();
+        DepartamentoEntidad objDepartamento;
         try {
             while (conResultado.next()) {
-                    objRol = new RolEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1));
-                    arrLstSubcriterio.add(objRol);
+                objDepartamento = new DepartamentoEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()), conResultado.getString(1), conResultado.getString(2));
+                arrLstSubcriterio.add(objDepartamento);
             }
         } catch (Exception e) {
             arrLstSubcriterio.clear();
@@ -80,16 +82,15 @@ public class RolModelo {
         return arrLstSubcriterio;
     }
 
-    public static int eliminarRol(long lonIdRolEliminar) throws Exception {
-        String strQuery = "select bd_st.fn_delete_rol(?)";
+    public static int eliminarDepartamento(long lonIdDepartamentoEliminar) throws Exception {
+        String strQuery = "select bd_st.fn_delete_departamento(?)";
         int intResultado = 0;
         ArrayList<Parametro> lisParametros = new ArrayList<>();
-        lisParametros.add(new Parametro(1, lonIdRolEliminar));
+        lisParametros.add(new Parametro(1, lonIdDepartamentoEliminar));
         ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, lisParametros);
         while (conResultado.next()) {
             intResultado = conResultado.getInt(0);
         }
         return intResultado;
     }
-
 }

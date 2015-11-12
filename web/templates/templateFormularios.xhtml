@@ -22,13 +22,16 @@
                 </p:layoutUnit>
                 <p:layoutUnit position="center">
                     <ui:insert name="contenido"/>
-                    <p:growl id="grlMensajes" autoUpdate="true" life="3000"/>
+                    <p:growl id="grlMensajes" autoUpdate="true" life="3000" />
                 </p:layoutUnit>
                 <p:layoutUnit position="west" size="300" >
                     <h:form id="frmMenu">
                         <p:panelMenu>
                             <p:submenu label="Usuarios">
                                 <p:menuitem value="Administrar" outcome="/Rol/frmAdministracionRol"/>
+                            </p:submenu>
+                            <p:submenu label="Departamentos">
+                                <p:menuitem value="Administrar" outcome="/Departamento/frmAdministracionDepartamento"/>
                             </p:submenu>
                         </p:panelMenu>
                     </h:form>

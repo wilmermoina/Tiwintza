@@ -122,7 +122,7 @@ public class RolControlador {
             Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
             long lonIdRolEliminar = Long.parseLong(params.get("prmIdRolEliminar"));
             if (RolModelo.eliminarRol(lonIdRolEliminar) > 1) {
-                Util.addSuccessMessage("Se elimino correctamente el Usuario");
+                Util.addSuccessMessage("Se ELIMINÓ correctamente el Usuario");
             } else {
                 Util.mostrarMensaje("No se pudo eliminar el Usuario");
             }
@@ -130,6 +130,23 @@ public class RolControlador {
         } catch (Exception e) {
             Util.addErrorMessage(e.getMessage());
         }
+    }
+
+    public void actualizarRol() {
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+            long lonIdRolEliminar = Long.parseLong(params.get("prmIdRolActualizar"));
+            if (RolModelo.actualizarRol(new RolEntidad(lonIdRolEliminar, objSelRol.getRol_descripcion())) > 1) {
+                Util.addSuccessMessage("Se ACTUALIZÓ correctamente el Usuario");
+            } else {
+                Util.mostrarMensaje("No se pudo actualizar el Usuario");
+            }
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+        delete();
+        cargarRol();
     }
 
     void delete() {
