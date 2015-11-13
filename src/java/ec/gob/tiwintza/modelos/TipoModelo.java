@@ -37,21 +37,20 @@ public class TipoModelo {
         return boolRespuesta;
     }
     
-    public static boolean actualizarTipo(TipoEntidad objTipoActualizar) throws Exception{
+    public static int actualizarTipo(TipoEntidad objTipoActualizar) throws Exception{
     
-        boolean booRespuesta= false;
+        int intRespuesta= 0;
         String strQuery = "select bd_st.fn_update_tipo(?,?,?)";
         ArrayList<Parametro> listParametros = new ArrayList<>();
         listParametros.add(new Parametro(1,objTipoActualizar.getTipo_id()));
         listParametros.add(new Parametro(2,objTipoActualizar.getTipo_nombre()));
         listParametros.add(new Parametro(3,objTipoActualizar.getTipo_descripcion()));
         ConjuntoResultado conResultado= AccesoDatos.ejecutaQuery(strQuery,listParametros);
-        while(conResultado.next()){
-            if(conResultado.getString(0).equals("true")){
-                booRespuesta=true;
-            }
+        while (conResultado.next()) {
+            intRespuesta= conResultado.getInt(0);
         }
-        return booRespuesta;
+        return intRespuesta;
+     
     }
     
     public static ArrayList<TipoEntidad> obtenerTipo() throws Exception{
@@ -69,10 +68,10 @@ public class TipoModelo {
     
     public static ArrayList<TipoEntidad> llenarTipo(ConjuntoResultado conResultado) throws Exception {
         ArrayList<TipoEntidad> arrLstTipo = new ArrayList<>();
-        TipoEntidad objTipo = null;
+        TipoEntidad objTipo;
         try {
             while (conResultado.next()) {
-                objTipo= new TipoEntidad(conResultado.getLong(0),conResultado.getString(1),conResultado.getString(2));
+                objTipo= new TipoEntidad(Long.parseLong(conResultado.getBigInteger(0).toString()),conResultado.getString(1),conResultado.getString(2));
                 arrLstTipo.add(objTipo);
             }
         } catch (Exception e) {
@@ -85,11 +84,11 @@ public class TipoModelo {
   public static int eliminarTipo(long lonTipoId) throws Exception {
         String strQuery = "select bd_st.fn_delete_tipo(?)";
         int intResultado = 0;
-        ArrayList<Parametro> lisParametros = new ArrayList<Parametro>();
+        ArrayList<Parametro> lisParametros = new ArrayList<>();
         lisParametros.add(new Parametro(1, lonTipoId));
         ConjuntoResultado conResultado = AccesoDatos.ejecutaQuery(strQuery, lisParametros);
         while (conResultado.next()) {
-            intResultado = (int) conResultado.getLong(0);
+            intResultado = conResultado.getInt(0);
         }
         return intResultado;
     }

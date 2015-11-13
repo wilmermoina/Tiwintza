@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/templateFormularios.xhtml">
+        <ui:define name="top">
+        </ui:define>
+
+        <ui:define name="contenido">
+            <p:fieldset legend="Crear" toggleable="true" toggleSpeed="500" collapsed="true">
+                <h:outputText value="Registro de un tipo de trámite" style="margin-left: 5%;font-weight: bold "/>
+                <p:separator />
+
+                <h:form id="frmIngresarTipo">
+                    <h:outputText value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                    <p:inputText requiredMessage="Ingrese la NOMBRE" required="true" 
+                        placeholder="Nombre" id="inpNombre" value="#{tipoControlador.objTipo.tipo_nombre}" style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                    <h:outputText value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                    <p:inputText requiredMessage="Ingrese la DESCRIPCIÓN" required="true" 
+                        placeholder="Descripción" id="inpDescripcion" value="#{tipoControlador.objTipo.tipo_descripcion}" style="width: 30%;height: 25px; margin-left: 5%"/><br/><br/>
+                    <p:commandButton id="btnIngresarTipo" style="width: 32.5%;margin-left: 5%" value="Registrar" 
+                                     action="#{tipoControlador.insertarTipo()}" update=":frmIngresarTipo"/><br/><br/>
+                </h:form>
+
+            </p:fieldset>
+            <p:separator style="backface-visibility: hidden"/>
+            <p:panel>
+                <h:outputText value="Administración de tipo de tramite" style="margin-left: 5%;font-weight: bold" />
+                <p:separator/>
+                <h:form id="frmTipo">
+                    <p:dataTable id="datTipo" value="#{tipoControlador.arrLisTipo}" var="tipo" paginator="true" rows="10"
+                                 selectionMode="single" selection="#{tipoControlador.objSelTipo}" rowKey="#{tipo.tipo_id}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="5,10,15" rendered="#{tipoControlador.arrLisTipo.size() > 0 eq true}">
+                        <p:column headerText="Codigo">
+                            <h:outputText value="#{tipo.tipo_id}"/>
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{tipo.tipo_nombre}"/>
+                        </p:column>
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{tipo.tipo_descripcion}"/>
+                        </p:column>
+                        <p:column style="width:80px;text-align: center" >
+                            <p:panelGrid columns="2">
+                                <p:column>
+                                    <p:commandLink styleClass="ui-icon ui-icon-pencil" process="@this"     
+                                                   oncomplete="PF('wgActualizarTipo').show()"
+                                                   update=":dlgActualizarTipo @parent">      
+                                        <f:setPropertyActionListener value="#{tipo}" target="#{tipoControlador.objSelTipo}"/>
+                                    </p:commandLink>
+                                </p:column>
+                                <p:column >
+                                    <p:commandLink  styleClass="ui-icon ui-icon-trash" process="@this"
+                                                    oncomplete="PF('wgEliminarTipo').show()"
+                                                    update=":dlgEliminarTipo @parent">  
+                                        <f:setPropertyActionListener value="#{tipo}" target="#{tipoControlador.objSelTipo}"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:panelGrid>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog id="dlgEliminarTipo" widgetVar="wgEliminarTipo" header="Eliminar tipo de tramite" style="margin-left: 5%;font-weight: bold" 
+                      modal="true" closable="false" resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmEliminarTipo">
+                    <p:panel id="pnlTipoEliminar" style="width: 660px; height: 390px;">
+                        <br/><br/><p:outputLabel value="Id:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{tipoControlador.objSelTipo.tipo_id}"/><br/><br/>
+                        <p:outputLabel value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{tipoControlador.objSelTipo.tipo_nombre}"/><br/><br/>
+                        <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="true" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{tipoControlador.objSelTipo.tipo_descripcion}"/><br/><br/><br/>
+                        <p:commandButton style="width: 40%;margin-left: 5%" value="Eliminar"
+                                         action="#{tipoControlador.eliminarTipo()}"
+                                         update=":frmTipo :frmEliminarTipo pnlTipoEliminar" onclick="PF('wgEliminarTipo').hide()">
+                            <f:param name="prmIdTipoEliminar" id="prmIdTipoEliminar" value="#{tipoControlador.objSelTipo.tipo_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                </h:form> 
+            </p:dialog>
+            
+             <p:dialog id="dlgActualizarTipo" widgetVar="wgActualizarTipo" header="Actualizar tipo de trámite" style="margin-left: 5%;font-weight: bold" 
+                      modal="true" closable="false" resizable="false"
+                      showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
+                      width="700" height="400">  
+                <h:form id="frmActualizarTipo">
+                    
+                      <p:panel id="pnlTipoActualizar" style="width: 660px; height: 390px;">
+                        <br/><br/><p:outputLabel value="Id:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="True" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{tipoControlador.objSelTipo.tipo_id}"/><br/><br/>
+                        <p:outputLabel value="Nombre:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="false" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{tipoControlador.objSelTipo.tipo_nombre}"/><br/><br/>
+                        <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
+                        <p:inputText disabled="false" style="width: 40%;height: 25px; margin-left: 5%"
+                                     value="#{tipoControlador.objSelTipo.tipo_descripcion}"/><br/><br/><br/>
+                        <p:commandButton style="width: 40%;margin-left: 5%" value="Actualizar"
+                                         action="#{tipoControlador.actualizarTipo()}"
+                                         update=":frmTipo :frmActualizarTipo pnlTipoActualizar" onclick="PF('wgActualizarTipo').hide()">
+                            <f:param name="prmIdTipoActualizar" id="prmIdTipo" value="#{tipoControlador.objSelTipo.tipo_id}"/>
+                        </p:commandButton> 
+                    </p:panel>
+                    
+                    
+                </h:form> 
+            </p:dialog>
+        </ui:define>
+
+    </ui:composition>
+</html>

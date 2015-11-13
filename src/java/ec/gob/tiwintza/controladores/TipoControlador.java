@@ -8,10 +8,13 @@ package ec.gob.tiwintza.controladores;
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.TipoEntidad;
 import ec.gob.tiwintza.modelos.TipoModelo;
+import ec.gob.tiwintza.modelos.TipoModelo;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -20,9 +23,9 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 @RequestScoped
 public class TipoControlador {
-   
+
     private TipoEntidad objTipo;
-    private TipoEntidad objSelRol;
+    private TipoEntidad objSelTipo;
     private ArrayList<TipoEntidad> arrLisTipo;
 
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets"> 
@@ -34,12 +37,12 @@ public class TipoControlador {
         this.objTipo = objTipo;
     }
 
-    public TipoEntidad getObjSelRol() {
-        return objSelRol;
+    public TipoEntidad getObjSelTipo() {
+        return objSelTipo;
     }
 
-    public void setObjSelRol(TipoEntidad objSelRol) {
-        this.objSelRol = objSelRol;
+    public void setObjSelTipo(TipoEntidad objSelTipo) {
+        this.objSelTipo = objSelTipo;
     }
 
     public ArrayList<TipoEntidad> getArrLisTipo() {
@@ -49,54 +52,88 @@ public class TipoControlador {
     public void setArrLisTipo(ArrayList<TipoEntidad> arrLisTipo) {
         this.arrLisTipo = arrLisTipo;
     }
- //</editor-fold>
+
+    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Constructores">
-   @PostConstruct
-   
-   public void reint(){
-       cargarTipo();
-   }
-   
-     public TipoControlador(TipoEntidad objTipo, TipoEntidad objSelRol, ArrayList<TipoEntidad> arrLisTipo) {
+
+    @PostConstruct
+
+    public void reint() {
+        cargarTipo();
+    }
+
+    public TipoControlador(TipoEntidad objTipo, TipoEntidad objSelTipo, ArrayList<TipoEntidad> arrLisTipo) {
         this.objTipo = objTipo;
-        this.objSelRol = objSelRol;
+        this.objSelTipo = objSelTipo;
         this.arrLisTipo = arrLisTipo;
     }
-     
-     public TipoControlador(){
-         objTipo = new TipoEntidad();
-         objSelRol= new TipoEntidad();
-         arrLisTipo= new ArrayList<>();
-     }
-    
+
+    public TipoControlador() {
+        objTipo = new TipoEntidad();
+        objSelTipo = new TipoEntidad();
+        arrLisTipo = new ArrayList<>();
+    }
+
    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Funciones">
+    public void cargarTipo() {
+        try {
+            this.arrLisTipo = TipoModelo.obtenerTipo();
+        } catch (Exception e) {
+            System.err.println("e" + e.getMessage());
+        }
+    }
 
-  public void cargarTipo(){
-      try {
-          this.arrLisTipo=TipoModelo.obtenerTipo();
-      } catch (Exception e) {
-          System.err.println("e"+e.getMessage());
-      }
-  }
-  
-  public void insertarTipo(){
-      try {
-          if(TipoModelo.insertarTipo(objTipo)){
-              Util.addSuccessMessage("Se ingreso un nuevo Tipo de Trámite");
-          } else{
-              Util.mostrarMensaje("Datos no ingresados");
-          }
-      } catch (Exception e) {
-          Util.addErrorMessage(e.getMessage());
-      }
-      delete();
-  }
-  
-  void delete(){
-      objTipo=null;
-      objSelRol=null;
-      arrLisTipo=null;
-  }
+    public void insertarTipo() {
+        try {
+            if (TipoModelo.insertarTipo(objTipo)) {
+                Util.addSuccessMessage("Se ingreso un nuevo Tipo de Trámite");
+            } else {
+                Util.mostrarMensaje("Datos no ingresados");
+            }
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+        delete();
+    }
+
+    void delete() {
+        objTipo = null;
+        objSelTipo = null;
+        arrLisTipo = null;
+    }
+
+    public void eliminarTipo() {
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+            long lonIdTipoEliminar = Long.parseLong(params.get("prmIdTipoEliminar"));
+            if (TipoModelo.eliminarTipo(lonIdTipoEliminar) > 1) {
+                Util.addSuccessMessage("Se elimino correctamente el tipo de trámite");
+            } else {
+                Util.mostrarMensaje("No se pudo eliminar el tipo de trámite");
+            }
+            cargarTipo();
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+    }
+
+    public void actualizarTipo() {
+        try {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
+            long lonIdTipoEliminar = Long.parseLong(params.get("prmIdTipoActualizar"));
+            if (TipoModelo.actualizarTipo(new TipoEntidad(lonIdTipoEliminar, objSelTipo.getTipo_nombre(),objSelTipo.getTipo_descripcion())) > 1) {
+                Util.mostrarMensaje("No se actualizó el tipo de trámite");
+            } else {
+                Util.addSuccessMessage("Se actualizó el tramite correctamente");
+            }
+        } catch (Exception e) {
+            Util.addErrorMessage(e.getMessage());
+        }
+        delete();
+        cargarTipo();
+    }
 //</editor-fold>
 }
