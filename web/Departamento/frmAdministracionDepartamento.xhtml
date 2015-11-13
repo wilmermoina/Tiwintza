@@ -106,10 +106,10 @@
                                      value="#{departamentoControlador.objSelDepartamento.departamento_id}"/><br/><br/>
                         <p:outputLabel value="Nombre:" style="margin-left: 5%"/><br/><br/>
                         <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
-                                     value="#{departamentoControlador.objSelDepartamento.departamento_nombre}"/><br/><br/>
+                                     required="true" value="#{departamentoControlador.objSelDepartamento.departamento_nombre}"/><br/><br/>
                         <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
                         <p:inputTextarea counterTemplate="{0}" maxlength="100" counter="display" style="width: 40%;height: 25px; margin-left: 5%"
-                                     value="#{departamentoControlador.objSelDepartamento.departamento_descripcion}"/>
+                                     required="true" value="#{departamentoControlador.objSelDepartamento.departamento_descripcion}"/>
                         <h:outputText id="display" style="margin-left: 5px"/><br/><br/>
                         <p:commandButton style="width: 43%;margin-left: 5%" value="Actualizar"
                                          action="#{departamentoControlador.actualizarDepartamento()}"

@@ -25,7 +25,7 @@
                 </h:form>
             </p:fieldset><br/>
             <p:panel>
-                <h:outputText value="Administración de Usuarios" style="margin-left: 5%;" />
+                <h:outputText value="Administración de Usuarios del Sistem" style="margin-left: 5%;" />
                 <p:separator />
                 <h:form id="frmRol">
                     <p:dataTable id="datRol" value="#{rolControlador.arrLisRol}" var="rol" paginator="true" rows="10"
@@ -62,7 +62,7 @@
         </ui:define>
 
         <ui:define name="dialogos">
-            <p:dialog id="dlgEliminarRol" widgetVar="wgEliminarRol" header="Eliminar Usuarios" 
+            <p:dialog id="dlgEliminarRol" widgetVar="wgEliminarRol" header="Eliminar Usuarios del Sistema" 
                       modal="true" closable="false" resizable="false"
                       showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
                       width="700" height="400">  
@@ -83,7 +83,7 @@
                 </h:form> 
             </p:dialog>
 
-            <p:dialog id="dlgActualizarRol" widgetVar="wgActualizarRol" header="Actualizar Usuarios" 
+            <p:dialog id="dlgActualizarRol" widgetVar="wgActualizarRol" header="Actualizar Usuarios del Sistema" 
                       modal="true" closable="false" resizable="false"
                       showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true"
                       width="700" height="400">  
@@ -94,7 +94,7 @@
                                      value="#{rolControlador.objSelRol.rol_id}"/><br/><br/>
                         <p:outputLabel value="Descripción:" style="margin-left: 5%"/><br/><br/>
                         <p:inputText style="width: 40%;height: 25px; margin-left: 5%"
-                                     value="#{rolControlador.objSelRol.rol_descripcion}"/><br/><br/><br/>
+                                     required="true" value="#{rolControlador.objSelRol.rol_descripcion}"/><br/><br/><br/>
                         <p:commandButton style="width: 43%;margin-left: 5%" value="Actualizar"
                                          action="#{rolControlador.actualizarRol()}"
                                          update=":frmRol :frmActualizarRol pnlRolActualizar" onclick="PF('wgActualizarRol').hide()">
