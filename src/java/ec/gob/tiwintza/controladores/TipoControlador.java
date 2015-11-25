@@ -7,11 +7,15 @@ package ec.gob.tiwintza.controladores;
 
 import ec.edu.espoch.sga.recursos.Util;
 import ec.gob.tiwintza.entidades.TipoEntidad;
+import ec.gob.tiwintza.entidades.Tramite_seguimiento_correoEntidad;
 import ec.gob.tiwintza.modelos.TipoModelo;
 import ec.gob.tiwintza.modelos.TipoModelo;
+import ec.gob.tiwintza.modelos.Tramite_seguimiento_correoModelo;
+import ec.gob.tiwintza.recursos.Enviar_correo;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -27,7 +31,7 @@ public class TipoControlador {
     private TipoEntidad objTipo;
     private TipoEntidad objSelTipo;
     private ArrayList<TipoEntidad> arrLisTipo;
-
+    
     //<editor-fold defaultstate="collapsed" desc="Sets y Gets"> 
     public TipoEntidad getObjTipo() {
         return objTipo;
@@ -55,7 +59,7 @@ public class TipoControlador {
 
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Constructores">
-
+    
     @PostConstruct
 
     public void reint() {
@@ -74,11 +78,11 @@ public class TipoControlador {
         arrLisTipo = new ArrayList<>();
     }
 
-   //</editor-fold>
+    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Funciones">
     public void cargarTipo() {
         try {
-            this.arrLisTipo = TipoModelo.obtenerTipo();
+            this.arrLisTipo = TipoModelo.obtenerTipo();     
         } catch (Exception e) {
             System.err.println("e" + e.getMessage());
         }
@@ -124,7 +128,7 @@ public class TipoControlador {
             FacesContext fc = FacesContext.getCurrentInstance();
             Map<String, String> params = fc.getExternalContext().getRequestParameterMap();
             long lonIdTipoEliminar = Long.parseLong(params.get("prmIdTipoActualizar"));
-            if (TipoModelo.actualizarTipo(new TipoEntidad(lonIdTipoEliminar, objSelTipo.getTipo_nombre(),objSelTipo.getTipo_descripcion())) > 1) {
+            if (TipoModelo.actualizarTipo(new TipoEntidad(lonIdTipoEliminar, objSelTipo.getTipo_nombre(), objSelTipo.getTipo_descripcion())) > 1) {
                 Util.mostrarMensaje("No se actualizó el tipo de trámite");
             } else {
                 Util.addSuccessMessage("Se actualizó el tramite correctamente");
